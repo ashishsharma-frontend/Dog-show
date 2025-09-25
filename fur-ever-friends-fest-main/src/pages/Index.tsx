@@ -2,10 +2,9 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import OneImage from "../assets/WhatsApp Image 2025-09-25 at 09.54.52_57e606aa.jpg";
-import TwoImge from "../assets/WhatsApp Image 2025-09-25 at 09.54.50_6ac4383c.jpg";
-import ThirdImage from "../assets/WhatsApp Image 2025-09-25 at 09.54.51_53a17276.jpg";
-
+import OneImage from "../assets/Competion.jpg";
+import TwoImge from "../assets/arena.jpg";
+import ThirdImage from "../assets/08.jpg";
 
 import {
   Calendar,
@@ -22,6 +21,8 @@ import {
   Sparkles,
   ChevronLeft,
   ChevronRight,
+  ArrowLeft,
+  ArrowRight,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { RegistrationForm } from "@/components/RegistrationForm";
@@ -43,7 +44,7 @@ const Index = () => {
   const [isLearnOpen, setIsLearnOpen] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(false); // Disabled by default
   const [visibleCount, setVisibleCount] = useState(3);
 
   const handlePackageSelect = (pkg) => {
@@ -129,15 +130,15 @@ const Index = () => {
     setCurrentIndex(index);
   };
 
-  // Auto-play functionality
+  // Auto-play functionality (disabled by default for mobile)
   useEffect(() => {
-    if (isAutoPlaying) {
-      const interval = setInterval(nextSlide, 4000);
+    if (isAutoPlaying && window.innerWidth >= 768) { // Only on desktop
+      const interval = setInterval(nextSlide, 5000);
       return () => clearInterval(interval);
     }
   }, [isAutoPlaying, currentIndex]);
 
-  // Responsive visible count (1 on mobile, 2 on tablet, 3 on desktop)
+  // Responsive visible count
   useEffect(() => {
     const updateVisible = () => {
       const w = window.innerWidth;
@@ -160,7 +161,7 @@ const Index = () => {
   const transformPercent = visibleCount === 1 ? currentIndex * 100 : currentIndex * (100 / visibleCount);
 
   return (
-    <div className="min-h-screen bg-gradient-warm font-retro">
+    <div className="min-h-screen bg-gradient-warm font-sans">
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
           <div
@@ -174,12 +175,12 @@ const Index = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-primary-900/80 via-primary-900/60 to-transparent" />
 
         <div className="relative z-10 text-center text-primary-foreground px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <Badge className="mb-4 sm:mb-6 inline-block bg-retro-gold text-retro-brown text-sm sm:text-base lg:text-lg px-4 sm:px-6 py-2 rounded-full shadow-lg animate-float">
+          <Badge className="mb-4 sm:mb-6 inline-block bg-retro-gold text-retro-brown text-sm sm:text-base lg:text-base px-4 sm:px-6 py-2 rounded-full shadow-lg animate-float">
             <Calendar className="w-4 h-4 mr-2 inline" />
             December 15, 2025 • Nationwide Event
           </Badge>
 
-          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-6xl font-extrabold mb-4 sm:mb-6 leading-tight tracking-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-black mb-4 sm:mb-6 leading-tight tracking-tight">
             INDIA'S
             <br />
             <span className="text-retro-gold">ULTIMATE</span>
@@ -187,23 +188,23 @@ const Index = () => {
             DOG SHOW
           </h1>
 
-          <p className="text-base sm:text-lg md:text-xl lg:text-xl mb-6 sm:mb-8 max-w-4xl mx-auto leading-relaxed text-primary-foreground/95 px-4">
+          <p className="text-base sm:text-lg md:text-xl lg:text-xl mb-6 sm:mb-8 max-w-4xl mx-auto leading-relaxed text-primary-foreground/95 px-4 font-medium">
             A nationwide celebration of canine talent — every registration helps
             rescue, rehabilitate, and shelter stray animals across India.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-6 sm:mb-8 px-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-6 sm:mb-8 px-4">
             <Button
               size="lg"
               aria-label="Register for dog show competition"
-              className="w-full sm:w-auto bg-retro-gold text-retro-brown hover:bg-retro-gold/95 text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 rounded-full shadow-2xl transform-gpu transition-all duration-300 hover:-translate-y-1 hover:shadow-retro"
+              className="w-full sm:w-auto bg-retro-gold text-retro-brown hover:bg-retro-gold/95 text-base sm:text-lg px-8 sm:px-10 py-3 sm:py-4 rounded-full shadow-2xl transform-gpu transition-all duration-300 hover:-translate-y-1 hover:shadow-retro font-bold"
               onClick={() =>
                 document
                   .getElementById("packages")
                   ?.scrollIntoView({ behavior: "smooth" })
               }
             >
-              <Trophy className="mr-2 h-5 w-5" />
+              <Trophy className="mr-3 h-6 w-6" />
               Register Now
             </Button>
 
@@ -211,23 +212,23 @@ const Index = () => {
               variant="outline"
               size="lg"
               aria-label="Support the rescue cause"
-              className="w-full sm:w-auto bg-white/10 text-white border-white/30 hover:bg-white hover:text-retro-brown text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 rounded-full backdrop-blur-sm transition-all duration-300"
+              className="w-full sm:w-auto bg-white/10 text-white border-white/30 hover:bg-white hover:text-retro-brown text-base sm:text-lg px-8 sm:px-10 py-3 sm:py-4 rounded-full backdrop-blur-sm transition-all duration-300 font-semibold"
               onClick={() =>
                 document
                   .getElementById("contact-donate")
                   ?.scrollIntoView({ behavior: "smooth" })
               }
             >
-              <Heart className="mr-2 h-5 w-5" />
+              <Heart className="mr-3 h-6 w-6" />
               Donate Now
             </Button>
           </div>
 
-          <div className="text-xs sm:text-sm lg:text-base opacity-90 px-4">
-            <p className="mb-1 font-medium">
+          <div className="text-sm sm:text-base lg:text-lg opacity-90 px-4">
+            <p className="mb-2 font-semibold">
               An Initiative by: <strong>Dog Foundation (Netherlands)</strong>
             </p>
-            <p className="text-xs sm:text-sm">
+            <p className="text-sm sm:text-base">
               Barchman Wuytierslaan, 2321, AC Amersfoort, Netherlands
             </p>
           </div>
@@ -235,43 +236,43 @@ const Index = () => {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8">
+      <section className="py-16 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-            <Card className="bg-card p-6 lg:p-8 rounded-2xl shadow-warm border border-primary/10 hover:shadow-retro transition-shadow duration-300 group">
-              <div className="w-12 h-12 lg:w-14 lg:h-14 bg-retro-gold/10 text-retro-gold rounded-full flex items-center justify-center mb-4 lg:mb-6 group-hover:scale-110 transition-transform duration-300">
-                <Heart className="w-6 h-6 lg:w-7 lg:h-7" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
+            <Card className="bg-card p-8 lg:p-10 rounded-2xl shadow-warm border border-primary/10 hover:shadow-retro transition-shadow duration-300 group">
+              <div className="w-16 h-16 lg:w-18 lg:h-18 bg-retro-gold/10 text-retro-gold rounded-full flex items-center justify-center mb-6 lg:mb-8 group-hover:scale-110 transition-transform duration-300">
+                <Heart className="w-8 h-8 lg:w-9 lg:h-9" />
               </div>
-              <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-3 text-accent">
+              <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-4 text-accent">
                 Rescue & Care
               </h3>
-              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+              <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
                 All registration fees directly fund medical care, shelter, and
                 rehabilitation programs for rescued animals.
               </p>
             </Card>
 
-            <Card className="bg-card p-6 lg:p-8 rounded-2xl shadow-warm border border-primary/10 hover:shadow-retro transition-shadow duration-300 group">
-              <div className="w-12 h-12 lg:w-14 lg:h-14 bg-retro-gold/10 text-retro-gold rounded-full flex items-center justify-center mb-4 lg:mb-6 group-hover:scale-110 transition-transform duration-300">
-                <Trophy className="w-6 h-6 lg:w-7 lg:h-7" />
+            <Card className="bg-card p-8 lg:p-10 rounded-2xl shadow-warm border border-primary/10 hover:shadow-retro transition-shadow duration-300 group">
+              <div className="w-16 h-16 lg:w-18 lg:h-18 bg-retro-gold/10 text-retro-gold rounded-full flex items-center justify-center mb-6 lg:mb-8 group-hover:scale-110 transition-transform duration-300">
+                <Trophy className="w-8 h-8 lg:w-9 lg:h-9" />
               </div>
-              <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-3 text-accent">
+              <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-4 text-accent">
                 Competitions & Prizes
               </h3>
-              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+              <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
                 Compete for trophies, cash prizes, and recognition — and help
                 local rescue efforts at the same time.
               </p>
             </Card>
 
-            <Card className="bg-card p-6 lg:p-8 rounded-2xl shadow-warm border border-primary/10 hover:shadow-retro transition-shadow duration-300 group">
-              <div className="w-12 h-12 lg:w-14 lg:h-14 bg-retro-gold/10 text-retro-gold rounded-full flex items-center justify-center mb-4 lg:mb-6 group-hover:scale-110 transition-transform duration-300">
-                <Users className="w-6 h-6 lg:w-7 lg:h-7" />
+            <Card className="bg-card p-8 lg:p-10 rounded-2xl shadow-warm border border-primary/10 hover:shadow-retro transition-shadow duration-300 group">
+              <div className="w-16 h-16 lg:w-18 lg:h-18 bg-retro-gold/10 text-retro-gold rounded-full flex items-center justify-center mb-6 lg:mb-8 group-hover:scale-110 transition-transform duration-300">
+                <Users className="w-8 h-8 lg:w-9 lg:h-9" />
               </div>
-              <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-3 text-accent">
+              <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-4 text-accent">
                 Community & Impact
               </h3>
-              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+              <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
                 Join a nationwide community; every participant helps build
                 sustainable rescue programs and awareness.
               </p>
@@ -279,55 +280,55 @@ const Index = () => {
           </div>
         </div>
         
-          <div className="mt-12 lg:mt-16 text-center">
-            <p className="text-base sm:text-lg lg:text-xl font-semibold mb-6 lg:mb-8 text-accent max-w-4xl mx-auto">
-              Competing supports rescue, medical care, and shelter for stray
-              animals — join a movement that makes a measurable difference.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Button
-                className="w-full sm:w-auto bg-retro-gold text-retro-brown hover:bg-retro-gold/95 px-6 lg:px-8 py-3 lg:py-4 rounded-full shadow-lg transition-all duration-300 hover:-translate-y-1"
-                onClick={() =>
-                  document
-                    .getElementById("packages")
-                    ?.scrollIntoView({ behavior: "smooth" })
-                }
-              >
-                Register to Save a Life
-              </Button>
-              <Button
-                variant="outline"
-                className="w-full sm:w-auto px-6 lg:px-8 py-3 lg:py-4 rounded-full border-2 hover:bg-accent hover:text-accent-foreground transition-colors duration-300"
-                onClick={() => setIsLearnOpen(true)}
-              >
-                Learn More
-              </Button>
-            </div>
+        <div className="mt-16 lg:mt-20 text-center">
+          <p className="text-lg sm:text-xl lg:text-2xl font-semibold mb-8 lg:mb-10 text-accent max-w-4xl mx-auto">
+            Competing supports rescue, medical care, and shelter for stray
+            animals — join a movement that makes a measurable difference.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+            <Button
+              className="w-full sm:w-auto bg-retro-gold text-retro-brown hover:bg-retro-gold/95 px-8 lg:px-10 py-4 lg:py-5 rounded-full shadow-lg transition-all duration-300 hover:-translate-y-1 text-lg font-bold"
+              onClick={() =>
+                document
+                  .getElementById("packages")
+                  ?.scrollIntoView({ behavior: "smooth" })
+              }
+            >
+              Register to Save a Life
+            </Button>
+            <Button
+              variant="outline"
+              className="w-full sm:w-auto px-8 lg:px-10 py-4 lg:py-5 rounded-full border-2 hover:bg-accent hover:text-accent-foreground transition-colors duration-300 text-lg font-semibold"
+              onClick={() => setIsLearnOpen(true)}
+            >
+              Learn More
+            </Button>
           </div>
+        </div>
       </section>
 
       {/* About Section */}
-      <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-retro-cream">
+      <section className="py-16 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 bg-retro-cream">
         <div className="max-w-7xl mx-auto text-center">
-          <h2 className="text-3xl sm:text-4xl lg:text-4xl xl:text-5xl font-bold text-accent mb-8 lg:mb-12">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-4xl font-black text-accent mb-12 lg:mb-16">
             ABOUT THE COMPETITION
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
             <Card className="bg-card shadow-warm hover:shadow-retro transition-all duration-300 hover:-translate-y-2 group">
-              <CardHeader className="pb-4">
-                <div className="w-16 h-16 lg:w-20 lg:h-20 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4 lg:mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <MapPin className="h-8 w-8 lg:h-10 lg:w-10 text-primary-foreground" />
+              <CardHeader className="pb-6">
+                <div className="w-20 h-20 lg:w-24 lg:h-24 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-6 lg:mb-8 group-hover:scale-110 transition-transform duration-300">
+                  <MapPin className="h-10 w-10 lg:h-12 lg:w-12 text-primary-foreground" />
                 </div>
-                <CardTitle className="text-xl sm:text-2xl lg:text-2xl text-accent">
+                <CardTitle className="text-2xl sm:text-3xl lg:text-3xl text-accent font-bold">
                   STAGE 1: CITY TRIALS
                 </CardTitle>
               </CardHeader>
               <CardContent className="pt-0">
-                <p className="text-base sm:text-md text-muted-foreground mb-4 font-semibold">
+                <p className="text-lg sm:text-xl text-muted-foreground mb-4 font-bold">
                   December 15, 2025
                 </p>
-                <p className="text-sm sm:text-base lg:text-lg leading-relaxed">
+                <p className="text-base sm:text-lg lg:text-xl leading-relaxed">
                   Compete in your city! Multiple locations across India
                   including Indore, Delhi, Mumbai, and more.
                 </p>
@@ -335,19 +336,19 @@ const Index = () => {
             </Card>
 
             <Card className="bg-card shadow-warm hover:shadow-retro transition-all duration-300 hover:-translate-y-2 group">
-              <CardHeader className="pb-4">
-                <div className="w-16 h-16 lg:w-20 lg:h-20 bg-gradient-retro rounded-full flex items-center justify-center mx-auto mb-4 lg:mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <Award className="h-8 w-8 lg:h-10 lg:w-10 text-primary-foreground" />
+              <CardHeader className="pb-6">
+                <div className="w-20 h-20 lg:w-24 lg:h-24 bg-gradient-retro rounded-full flex items-center justify-center mx-auto mb-6 lg:mb-8 group-hover:scale-110 transition-transform duration-300">
+                  <Award className="h-10 w-10 lg:h-12 lg:w-12 text-primary-foreground" />
                 </div>
-                <CardTitle className="text-xl sm:text-2xl lg:text-2xl text-accent">
+                <CardTitle className="text-2xl sm:text-3xl lg:text-3xl text-accent font-bold">
                   STAGE 2: STATE CHAMPIONSHIPS
                 </CardTitle>
               </CardHeader>
               <CardContent className="pt-0">
-                <p className="text-base sm:text-lg text-muted-foreground mb-4 font-semibold">
+                <p className="text-lg sm:text-xl text-muted-foreground mb-4 font-bold">
                   City Winners Advance
                 </p>
-                <p className="text-sm sm:text-base lg:text-lg leading-relaxed">
+                <p className="text-base sm:text-lg lg:text-xl leading-relaxed">
                   Free entry and travel for qualified participants. State-level
                   competition with bigger prizes.
                 </p>
@@ -355,19 +356,19 @@ const Index = () => {
             </Card>
 
             <Card className="bg-card shadow-warm hover:shadow-retro transition-all duration-300 hover:-translate-y-2 group">
-              <CardHeader className="pb-4">
-                <div className="w-16 h-16 lg:w-20 lg:h-20 bg-retro-gold rounded-full flex items-center justify-center mx-auto mb-4 lg:mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <Star className="h-8 w-8 lg:h-10 lg:w-10 text-retro-brown" />
+              <CardHeader className="pb-6">
+                <div className="w-20 h-20 lg:w-24 lg:h-24 bg-retro-gold rounded-full flex items-center justify-center mx-auto mb-6 lg:mb-8 group-hover:scale-110 transition-transform duration-300">
+                  <Star className="h-10 w-10 lg:h-12 lg:w-12 text-retro-brown" />
                 </div>
-                <CardTitle className="text-xl sm:text-2xl lg:text-2xl text-accent">
+                <CardTitle className="text-2xl sm:text-3xl lg:text-3xl text-accent font-bold">
                   STAGE 3: GRAND NATIONAL FINAL
                 </CardTitle>
               </CardHeader>
               <CardContent className="pt-0">
-                <p className="text-base sm:text-lg text-muted-foreground mb-4 font-semibold">
+                <p className="text-lg sm:text-xl text-muted-foreground mb-4 font-bold">
                   Ultimate Championship
                 </p>
-                <p className="text-sm sm:text-base lg:text-lg leading-relaxed">
+                <p className="text-base sm:text-lg lg:text-xl leading-relaxed">
                   Battle for the ultimate title! National recognition and grand
                   prizes await the winners.
                 </p>
@@ -377,97 +378,90 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Packages Section with Carousel */}
+      {/* Packages Section with Enhanced Carousel */}
       <section
         id="packages"
-        className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8"
+        className="py-16 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-8"
       >
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-8 lg:mb-12">
-            <h2 className="text-3xl sm:text-4xl lg:text-4xl xl:text-5xl font-bold text-accent mb-3 lg:mb-4">
+          <div className="text-center mb-12 lg:mb-16">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-4xl font-black text-accent mb-4 lg:mb-6">
               COMPETITION PACKAGES
             </h2>
-            <p className="text-lg sm:text-xl lg:text-xl text-muted-foreground mb-2">
+            <p className="text-xl sm:text-2xl lg:text-2xl text-muted-foreground mb-4 font-medium">
               Choose your category and unleash your dog's potential!
             </p>
           </div>
 
-          {/* Desktop Carousel */}
+          {/* Enhanced Carousel */}
           <div className="relative">
-            {/* Navigation Arrows */}
+            {/* Desktop Navigation Arrows */}
             <button
               onClick={prevSlide}
-              onMouseEnter={() => setIsAutoPlaying(false)}
-              onMouseLeave={() => setIsAutoPlaying(true)}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white hover:bg-gray-50 rounded-full p-3 shadow-lg border border-gray-200 transition-all duration-300 hover:scale-110 hover:shadow-xl hidden sm:block"
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white hover:bg-gray-50 rounded-full p-4 shadow-xl border-2 border-gray-200 transition-all duration-300 hover:scale-110 hover:shadow-2xl hidden lg:block"
               disabled={currentIndex === 0}
             >
-              <ChevronLeft className={`w-6 h-6 ${currentIndex === 0 ? 'text-gray-300' : 'text-gray-700'}`} />
+              <ChevronLeft className={`w-7 h-7 ${currentIndex === 0 ? 'text-gray-300' : 'text-gray-700'}`} />
             </button>
 
             <button
               onClick={nextSlide}
-              onMouseEnter={() => setIsAutoPlaying(false)}
-              onMouseLeave={() => setIsAutoPlaying(true)}
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white hover:bg-gray-50 rounded-full p-3 shadow-lg border border-gray-200 transition-all duration-300 hover:scale-110 hover:shadow-xl hidden sm:block"
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white hover:bg-gray-50 rounded-full p-4 shadow-xl border-2 border-gray-200 transition-all duration-300 hover:scale-110 hover:shadow-2xl hidden lg:block"
               disabled={currentIndex === Math.max(0, packages.length - visibleCount)}
             >
-              <ChevronRight className={`w-6 h-6 ${currentIndex === Math.max(0, packages.length - visibleCount) ? 'text-gray-300' : 'text-gray-700'}`} />
+              <ChevronRight className={`w-7 h-7 ${currentIndex === Math.max(0, packages.length - visibleCount) ? 'text-gray-300' : 'text-gray-700'}`} />
             </button>
 
             {/* Cards Container */}
-            <div 
-              className="overflow-hidden mx-4 sm:mx-12"
-              onMouseEnter={() => setIsAutoPlaying(false)}
-              onMouseLeave={() => setIsAutoPlaying(true)}
-            >
+            {/* allow vertical overflow to be visible so hover shadows and scaled cards are not clipped */}
+            <div className="overflow-x-hidden overflow-y-visible mx-0 lg:mx-16 px-4 sm:px-6 lg:px-0">
               <div 
-                className="flex transition-transform duration-500 ease-in-out gap-2 sm:gap-6"
+                className={`flex transition-transform duration-500 ease-in-out ${visibleCount === 1 ? 'gap-0' : 'gap-4 sm:gap-6 lg:gap-8'}`}
                 style={{
                   transform: `translateX(-${transformPercent}%)`
                 }}
               >
                 {packages.map((pkg, index) => (
-                  <div key={index} className={`${visibleCount === 3 ? 'w-1/3' : visibleCount === 2 ? 'w-1/2' : 'w-full'} flex-shrink-0`}>
-                    <Card className="bg-card border-2 border-primary shadow-retro hover:scale-105 hover:border-retro-gold transition-all duration-300 group cursor-pointer flex flex-col h-full">
-                      <CardHeader className="text-center py-6 lg:py-8">
-                        <CardTitle className="text-xl sm:text-2xl lg:text-3xl text-accent group-hover:text-retro-gold transition-colors duration-300">
+                  <div key={index} className={`${visibleCount === 3 ? 'w-1/3' : visibleCount === 2 ? 'w-1/2' : 'w-full'} flex-shrink-0 py-6 px-2 lg:px-4`}> 
+                    <Card className="bg-card border-3 border-primary shadow-2xl hover:scale-105 hover:border-retro-gold transition-all duration-300 group cursor-pointer flex flex-col h-full min-h-[440px] lg:min-h-[520px] rounded-3xl hover:z-30 will-change-transform">
+                      <CardHeader className="text-center py-8 lg:py-10">
+                        <CardTitle className="text-lg sm:text-xl lg:text-xl xl:text-2xl text-accent group-hover:text-retro-gold transition-colors duration-300 font-bold leading-tight">
                           {pkg.name}
                         </CardTitle>
-                        <p className="text-sm sm:text-base text-muted-foreground mt-2 lg:mt-3">
+                        <p className="text-sm sm:text-base lg:text-lg text-muted-foreground mt-3 lg:mt-4 leading-relaxed">
                           {pkg.description}
                         </p>
                       </CardHeader>
-                      <CardContent className="space-y-6 lg:space-y-8 flex-1 flex flex-col justify-between">
-                        <div className="flex items-baseline justify-center gap-2 lg:gap-4">
-                          <div className="text-3xl sm:text-4xl lg:text-4xl font-extrabold text-primary">
+                      <CardContent className="space-y-6 lg:space-y-8 flex-1 flex flex-col justify-between px-6 lg:px-8">
+                        <div className="flex items-baseline justify-center gap-3 lg:gap-4">
+                          <div className="text-xl sm:text-2xl lg:text-3xl font-black text-primary">
                             {pkg.standardFee}
                           </div>
-                          <div className="text-xs sm:text-sm text-muted-foreground">
+                          <div className="text-sm sm:text-base text-muted-foreground font-semibold">
                             Standard
                           </div>
                         </div>
 
-                        <div className="flex items-baseline justify-center gap-2 lg:gap-4 border-t pt-6 lg:pt-8">
-                          <div className="text-2xl sm:text-3xl lg:text-3xl font-bold text-retro-gold">
+                        <div className="flex items-baseline justify-center gap-3 lg:gap-4 border-t-2 pt-6 lg:pt-8">
+                          <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-retro-gold">
                             {pkg.withTrainer}
                           </div>
-                          <div className="text-xs sm:text-sm text-muted-foreground">
+                          <div className="text-sm sm:text-base text-muted-foreground font-semibold">
                             With Trainer
                           </div>
                         </div>
 
                         <div className="flex justify-center">
-                          <Badge className="bg-retro-gold text-retro-brown text-xs sm:text-sm px-3 py-1">
+                          <Badge className="bg-retro-gold text-retro-brown text-sm sm:text-base px-4 py-2 font-bold">
                             Save ₹7,500
                           </Badge>
                         </div>
 
                         <Button
-                          className="w-full bg-gradient-primary hover:brightness-95 text-base sm:text-lg py-3 lg:py-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+                          className="w-full bg-gradient-primary hover:brightness-95 text-base sm:text-lg py-3 lg:py-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl font-bold"
                           onClick={() => handlePackageSelect(pkg)}
                         >
-                          <Trophy className="mr-2 h-4 w-4 lg:h-5 lg:w-5" />
+                          <Trophy className="mr-3 h-5 w-5 lg:h-6 lg:w-6" />
                           Select Package
                         </Button>
                       </CardContent>
@@ -477,13 +471,31 @@ const Index = () => {
               </div>
             </div>
 
+            {/* Mobile Navigation Arrows */}
+            <div className="flex justify-center mt-8 gap-4 lg:hidden">
+              <button
+                onClick={prevSlide}
+                className="bg-white hover:bg-gray-50 rounded-full p-3 shadow-lg border-2 border-gray-200 transition-all duration-300 hover:scale-110"
+                disabled={currentIndex === 0}
+              >
+                <ArrowLeft className={`w-6 h-6 ${currentIndex === 0 ? 'text-gray-300' : 'text-gray-700'}`} />
+              </button>
+              <button
+                onClick={nextSlide}
+                className="bg-white hover:bg-gray-50 rounded-full p-3 shadow-lg border-2 border-gray-200 transition-all duration-300 hover:scale-110"
+                disabled={currentIndex === Math.max(0, packages.length - visibleCount)}
+              >
+                <ArrowRight className={`w-6 h-6 ${currentIndex === Math.max(0, packages.length - visibleCount) ? 'text-gray-300' : 'text-gray-700'}`} />
+              </button>
+            </div>
+
             {/* Dots Indicator */}
-            <div className="flex justify-center mt-8 space-x-2">
+            <div className="flex justify-center mt-8 space-x-3">
               {Array.from({ length: Math.max(1, packages.length - visibleCount + 1) }).map((_, index) => (
                 <button
                   key={index}
                   onClick={() => goToSlide(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  className={`w-4 h-4 rounded-full transition-all duration-300 ${
                     index === currentIndex 
                       ? 'bg-blue-600 scale-125' 
                       : 'bg-gray-300 hover:bg-gray-400'
@@ -493,12 +505,12 @@ const Index = () => {
             </div>
           </div>
 
-          <Card className="bg-retro-gold/10 border-2 border-retro-gold mt-12">
-            <CardContent className="p-6 sm:p-8 lg:p-10 text-center">
-              <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-retro-brown mb-4 lg:mb-6">
+          <Card className="bg-retro-gold/10 border-3 border-retro-gold mt-16">
+            <CardContent className="p-8 sm:p-10 lg:p-12 text-center">
+              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-retro-brown mb-6 lg:mb-8">
                 Need a Professional Trainer?
               </h3>
-              <p className="text-base sm:text-lg lg:text-xl text-accent mb-6 lg:mb-8">
+              <p className="text-lg sm:text-xl lg:text-2xl text-accent mb-8 lg:mb-10 font-medium">
                 Hire a certified trainer separately for ₹7,500 or book upfront
                 with your package to save!
               </p>
@@ -508,21 +520,21 @@ const Index = () => {
       </section>
 
       {/* Rules Section */}
-      <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-muted">
+      <section className="py-16 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 bg-muted">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl lg:text-4xl xl:text-5xl font-bold text-accent text-center mb-12 lg:mb-16">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-4xl font-black text-accent text-center mb-16 lg:mb-20">
             COMPETITION RULES
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-10">
             {rules.map((rule, index) => (
               <Card
                 key={index}
                 className="bg-card shadow-warm hover:shadow-retro transition-all duration-300 hover:-translate-y-1 group"
               >
-                <CardContent className="p-4 sm:p-6 lg:p-8 flex items-center gap-4 lg:gap-6">
-                  <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 lg:h-7 lg:w-7 text-primary flex-shrink-0 group-hover:text-retro-gold transition-colors duration-300" />
-                  <p className="text-sm sm:text-base lg:text-lg leading-relaxed">
+                <CardContent className="p-6 sm:p-8 lg:p-10 flex items-center gap-6 lg:gap-8">
+                  <CheckCircle className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-primary flex-shrink-0 group-hover:text-retro-gold transition-colors duration-300" />
+                  <p className="text-base sm:text-lg lg:text-xl leading-relaxed font-medium">
                     {rule}
                   </p>
                 </CardContent>
@@ -533,58 +545,58 @@ const Index = () => {
       </section>
 
       {/* Event Date & Cities Section */}
-      <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-retro">
+      <section className="py-16 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-retro">
         <div className="max-w-7xl mx-auto text-center text-primary-foreground">
-          <h2 className="text-3xl sm:text-4xl lg:text-4xl xl:text-5xl font-bold mb-6 sm:mb-8 lg:mb-12">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-4xl font-black mb-8 sm:mb-12 lg:mb-16">
             CITY TRIALS
           </h2>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 lg:gap-6 mb-8 sm:mb-12 lg:mb-16">
-            <Calendar className="h-6 w-6 sm:h-8 sm:w-8 lg:h-10 lg:w-10" />
-            <span className="text-2xl sm:text-3xl lg:text-3xl xl:text-4xl font-bold">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 lg:gap-8 mb-12 sm:mb-16 lg:mb-20">
+            <Calendar className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12" />
+            <span className="text-2xl sm:text-3xl lg:text-4xl xl:text-4xl font-black">
               December 15, 2025
             </span>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 sm:gap-4 lg:gap-6 mb-8 sm:mb-12 lg:mb-16">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 sm:gap-6 lg:gap-8 mb-12 sm:mb-16 lg:mb-20">
             {cities.map((city) => (
               <Badge
                 key={city}
                 role="button"
                 tabIndex={0}
-                className="bg-white text-retro-brown text-sm sm:text-base lg:text-lg py-2 sm:py-3 lg:py-4 px-3 sm:px-4 lg:px-6 font-medium rounded-full shadow-sm hover:bg-retro-gold hover:text-white focus:outline-none focus:ring-2 focus:ring-retro-gold transition-all duration-300 cursor-pointer hover:-translate-y-1"
+                className="bg-white text-retro-brown text-base sm:text-lg lg:text-xl py-3 sm:py-4 lg:py-5 px-4 sm:px-6 lg:px-8 font-bold rounded-full shadow-sm hover:bg-retro-gold hover:text-white focus:outline-none focus:ring-2 focus:ring-retro-gold transition-all duration-300 cursor-pointer hover:-translate-y-1"
               >
                 {city}
               </Badge>
             ))}
           </div>
 
-          <p className="text-lg sm:text-xl lg:text-2xl opacity-90">
+          <p className="text-xl sm:text-2xl lg:text-3xl opacity-90 font-medium">
             Locations: Indore, Madhya Pradesh & Major Cities Nationwide
           </p>
         </div>
       </section>
 
       {/* Image Gallery Section */}
-      <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8">
+      <section className="py-16 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl lg:text-4xl xl:text-5xl font-bold text-accent text-center mb-12 lg:mb-16">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-4xl font-black text-accent text-center mb-16 lg:mb-20">
             GALLERY
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
             <Card className="overflow-hidden shadow-retro hover:shadow-warm transition-all duration-300 hover:-translate-y-2 group">
               <div className="overflow-hidden">
                 <img
                   src={OneImage}
                   alt="Indian street dog - competition categories"
-                  className="w-full h-48 sm:h-56 lg:h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                  className="w-full h-56 sm:h-64 lg:h-72 object-cover group-hover:scale-110 transition-transform duration-500"
                 />
               </div>
-              <CardContent className="p-4 sm:p-6 lg:p-8">
-                <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-accent mb-2 lg:mb-3">
+              <CardContent className="p-6 sm:p-8 lg:p-10">
+                <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-accent mb-3 lg:mb-4">
                   Three Competition Categories
                 </h3>
-                <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+                <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
                   Smart, Cute Look, and Fastest competitions
                 </p>
               </CardContent>
@@ -595,14 +607,14 @@ const Index = () => {
                 <img
                   src={TwoImge}
                   alt="Indian street dogs gathering"
-                  className="w-full h-48 sm:h-56 lg:h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                  className="w-full h-56 sm:h-64 lg:h-72 object-cover group-hover:scale-110 transition-transform duration-500"
                 />
               </div>
-              <CardContent className="p-4 sm:p-6 lg:p-8">
-                <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-accent mb-2 lg:mb-3">
+              <CardContent className="p-6 sm:p-8 lg:p-10">
+                <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-accent mb-3 lg:mb-4">
                   Professional Arena
                 </h3>
-                <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+                <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
                   State-of-the-art competition venues
                 </p>
               </CardContent>
@@ -613,14 +625,14 @@ const Index = () => {
                 <img
                   src={ThirdImage}
                   alt="Rescued Indian street dog in shelter"
-                  className="w-full h-48 sm:h-56 lg:h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                  className="w-full h-56 sm:h-64 lg:h-72 object-cover group-hover:scale-110 transition-transform duration-500"
                 />
               </div>
-              <CardContent className="p-4 sm:p-6 lg:p-8">
-                <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-accent mb-2 lg:mb-3">
+              <CardContent className="p-6 sm:p-8 lg:p-10">
+                <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-accent mb-3 lg:mb-4">
                   Supporting the Cause
                 </h3>
-                <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+                <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
                   Every entry helps rescue and rehabilitate strays
                 </p>
               </CardContent>
@@ -759,7 +771,7 @@ const Index = () => {
                 medical care to street dogs who need it most.
               </p>
               <button className="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-bold px-10 py-4 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-lg">
-                💝 Donate Now
+                Donate Now
               </button>
             </div>
 
@@ -788,38 +800,38 @@ const Index = () => {
         </div>
         
         <div className="max-w-6xl mx-auto text-center">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 sm:mb-8 lg:mb-10 text-accent">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-8 sm:mb-10 lg:mb-12 text-accent">
             CONTACT & SUPPORT
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mb-8 sm:mb-10 lg:mb-12">
-            <Card className="bg-card border border-primary/10 shadow-sm hover:shadow-warm transition-all duration-300">
-              <CardContent className="p-6 lg:p-8 text-center">
-                <Globe className="h-6 w-6 sm:h-8 sm:w-8 lg:h-10 lg:w-10 mx-auto mb-4 lg:mb-6" />
-                <h3 className="font-bold mb-1 lg:mb-2 text-base lg:text-lg">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10 mb-12 sm:mb-14 lg:mb-16">
+            <Card className="bg-card border border-primary/10 shadow-sm hover:shadow-warm transition-all duration-300 p-8 lg:p-10">
+              <CardContent className="text-center">
+                <Globe className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 mx-auto mb-6 lg:mb-8" />
+                <h3 className="font-bold mb-2 lg:mb-3 text-lg lg:text-xl">
                   Website
                 </h3>
-                <p className="text-sm sm:text-base">tranquil-dogshow.in</p>
+                <p className="text-base sm:text-lg">tranquil-dogshow.in</p>
               </CardContent>
             </Card>
 
-            <Card className="bg-card border border-primary/10 shadow-sm hover:shadow-warm transition-all duration-300">
-              <CardContent className="p-6 lg:p-8 text-center">
-                <Mail className="h-6 w-6 sm:h-8 sm:w-8 lg:h-10 lg:w-10 mx-auto mb-4 lg:mb-6" />
-                <h3 className="font-bold mb-1 lg:mb-2 text-base lg:text-lg">
+            <Card className="bg-card border border-primary/10 shadow-sm hover:shadow-warm transition-all duration-300 p-8 lg:p-10">
+              <CardContent className="text-center">
+                <Mail className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 mx-auto mb-6 lg:mb-8" />
+                <h3 className="font-bold mb-2 lg:mb-3 text-lg lg:text-xl">
                   Email
                 </h3>
-                <p className="text-sm sm:text-base">info@tranquil-dogshow.in</p>
+                <p className="text-base sm:text-lg">info@tranquil-dogshow.in</p>
               </CardContent>
             </Card>
 
-            <Card className="bg-card border border-primary/10 shadow-sm hover:shadow-warm transition-all duration-300">
-              <CardContent className="p-6 lg:p-8 text-center">
-                <Phone className="h-6 w-6 sm:h-8 sm:w-8 lg:h-10 lg:w-10 mx-auto mb-4 lg:mb-6" />
-                <h3 className="font-bold mb-1 lg:mb-2 text-base lg:text-lg">
+            <Card className="bg-card border border-primary/10 shadow-sm hover:shadow-warm transition-all duration-300 p-8 lg:p-10">
+              <CardContent className="text-center">
+                <Phone className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 mx-auto mb-6 lg:mb-8" />
+                <h3 className="font-bold mb-2 lg:mb-3 text-lg lg:text-xl">
                   Phone
                 </h3>
-                <p className="text-sm sm:text-base">+91 98XXX XXXXX</p>
+                <p className="text-base sm:text-lg">+91 98XXX XXXXX</p>
               </CardContent>
             </Card>
           </div>
@@ -827,10 +839,10 @@ const Index = () => {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-accent text-accent-foreground">
+      <footer className="py-16 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 bg-accent text-accent-foreground">
         <div className="max-w-7xl mx-auto text-center">
-          <div className="mb-8 lg:mb-12">
-            <p className="text-xl sm:text-2xl lg:text-2xl font-bold mb-2 lg:mb-4">
+          <div className="mb-12 lg:mb-16">
+            <p className="text-xl sm:text-2xl lg:text-3xl font-bold mb-4 lg:mb-6">
               Dog Foundation (Netherlands)
             </p>
             <p className="text-base sm:text-lg lg:text-xl opacity-90">
@@ -838,8 +850,8 @@ const Index = () => {
             </p>
           </div>
 
-          <div className="border-t border-accent-foreground/20 pt-8 lg:pt-12">
-            <p className="text-xl sm:text-2xl lg:text-2xl xl:text-3xl font-bold text-retro-gold mb-3 lg:mb-4">
+          <div className="border-t border-accent-foreground/20 pt-12 lg:pt-16">
+            <p className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-retro-gold mb-4 lg:mb-6">
               YOUR PARTICIPATION FUELS OUR MISSION
             </p>
             <p className="text-base sm:text-lg lg:text-xl opacity-90 max-w-4xl mx-auto">
