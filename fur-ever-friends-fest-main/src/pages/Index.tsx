@@ -44,6 +44,7 @@ const Index = () => {
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [visibleCount, setVisibleCount] = useState(3);
 
   const handlePackageSelect = (pkg) => {
     setSelectedPackage(pkg);
@@ -114,13 +115,13 @@ const Index = () => {
   // Carousel functions
   const nextSlide = () => {
     setCurrentIndex((prevIndex) => 
-      prevIndex === packages.length - 3 ? 0 : prevIndex + 1
+      prevIndex === Math.max(0, packages.length - visibleCount) ? 0 : prevIndex + 1
     );
   };
 
   const prevSlide = () => {
     setCurrentIndex((prevIndex) => 
-      prevIndex === 0 ? packages.length - 3 : prevIndex - 1
+      prevIndex === 0 ? Math.max(0, packages.length - visibleCount) : prevIndex - 1
     );
   };
 
@@ -135,6 +136,28 @@ const Index = () => {
       return () => clearInterval(interval);
     }
   }, [isAutoPlaying, currentIndex]);
+
+  // Responsive visible count (1 on mobile, 2 on tablet, 3 on desktop)
+  useEffect(() => {
+    const updateVisible = () => {
+      const w = window.innerWidth;
+      if (w >= 1024) setVisibleCount(3);
+      else if (w >= 768) setVisibleCount(2);
+      else setVisibleCount(1);
+    };
+    updateVisible();
+    window.addEventListener("resize", updateVisible);
+    return () => window.removeEventListener("resize", updateVisible);
+  }, []);
+
+  // Clamp currentIndex when visibleCount or packages change
+  useEffect(() => {
+    const maxIndex = Math.max(0, packages.length - visibleCount);
+    if (currentIndex > maxIndex) setCurrentIndex(maxIndex);
+  }, [visibleCount, packages.length]);
+
+  // Compute transform percent for carousel movement
+  const transformPercent = visibleCount === 1 ? currentIndex * 100 : currentIndex * (100 / visibleCount);
 
   return (
     <div className="min-h-screen bg-gradient-warm font-retro">
@@ -376,7 +399,7 @@ const Index = () => {
               onClick={prevSlide}
               onMouseEnter={() => setIsAutoPlaying(false)}
               onMouseLeave={() => setIsAutoPlaying(true)}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white hover:bg-gray-50 rounded-full p-3 shadow-lg border border-gray-200 transition-all duration-300 hover:scale-110 hover:shadow-xl"
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white hover:bg-gray-50 rounded-full p-3 shadow-lg border border-gray-200 transition-all duration-300 hover:scale-110 hover:shadow-xl hidden sm:block"
               disabled={currentIndex === 0}
             >
               <ChevronLeft className={`w-6 h-6 ${currentIndex === 0 ? 'text-gray-300' : 'text-gray-700'}`} />
@@ -386,26 +409,26 @@ const Index = () => {
               onClick={nextSlide}
               onMouseEnter={() => setIsAutoPlaying(false)}
               onMouseLeave={() => setIsAutoPlaying(true)}
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white hover:bg-gray-50 rounded-full p-3 shadow-lg border border-gray-200 transition-all duration-300 hover:scale-110 hover:shadow-xl"
-              disabled={currentIndex === packages.length - 3}
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white hover:bg-gray-50 rounded-full p-3 shadow-lg border border-gray-200 transition-all duration-300 hover:scale-110 hover:shadow-xl hidden sm:block"
+              disabled={currentIndex === Math.max(0, packages.length - visibleCount)}
             >
-              <ChevronRight className={`w-6 h-6 ${currentIndex === packages.length - 3 ? 'text-gray-300' : 'text-gray-700'}`} />
+              <ChevronRight className={`w-6 h-6 ${currentIndex === Math.max(0, packages.length - visibleCount) ? 'text-gray-300' : 'text-gray-700'}`} />
             </button>
 
             {/* Cards Container */}
             <div 
-              className="overflow-hidden mx-12"
+              className="overflow-hidden mx-4 sm:mx-12"
               onMouseEnter={() => setIsAutoPlaying(false)}
               onMouseLeave={() => setIsAutoPlaying(true)}
             >
               <div 
-                className="flex transition-transform duration-500 ease-in-out gap-6"
+                className="flex transition-transform duration-500 ease-in-out gap-2 sm:gap-6"
                 style={{
-                  transform: `translateX(-${currentIndex * (100/3)}%)`
+                  transform: `translateX(-${transformPercent}%)`
                 }}
               >
                 {packages.map((pkg, index) => (
-                  <div key={index} className="w-1/3 flex-shrink-0">
+                  <div key={index} className={`${visibleCount === 3 ? 'w-1/3' : visibleCount === 2 ? 'w-1/2' : 'w-full'} flex-shrink-0`}>
                     <Card className="bg-card border-2 border-primary shadow-retro hover:scale-105 hover:border-retro-gold transition-all duration-300 group cursor-pointer flex flex-col h-full">
                       <CardHeader className="text-center py-6 lg:py-8">
                         <CardTitle className="text-xl sm:text-2xl lg:text-3xl text-accent group-hover:text-retro-gold transition-colors duration-300">
@@ -456,7 +479,7 @@ const Index = () => {
 
             {/* Dots Indicator */}
             <div className="flex justify-center mt-8 space-x-2">
-              {Array.from({ length: packages.length - 2 }).map((_, index) => (
+              {Array.from({ length: Math.max(1, packages.length - visibleCount + 1) }).map((_, index) => (
                 <button
                   key={index}
                   onClick={() => goToSlide(index)}
