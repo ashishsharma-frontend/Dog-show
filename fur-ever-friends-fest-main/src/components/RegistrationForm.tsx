@@ -44,7 +44,7 @@ export const RegistrationForm = ({ isOpen, onClose, selectedPackage }: Registrat
     
     // Competition Details
     packageType: "standard",
-    needTrainer: false,
+  grooming: false,
     preferredCity: "",
     
     // Additional
@@ -75,8 +75,11 @@ export const RegistrationForm = ({ isOpen, onClose, selectedPackage }: Registrat
     }
     
     let total = basePrice;
-    if (formData.needTrainer && formData.packageType === "standard") {
-      total += 7500; // Trainer fee when booked separately
+  // Trainer is handled via 'withTrainer' package option; no separate add-on fee here
+
+    // Add grooming fee if selected
+    if (formData.grooming) {
+      total += 1000; // Grooming price
     }
     
     return total;
@@ -156,14 +159,16 @@ export const RegistrationForm = ({ isOpen, onClose, selectedPackage }: Registrat
                   
                   {formData.packageType === "standard" && (
                     <div className="space-y-3">
-                      <Label>Need Trainer Separately?</Label>
-                      <div className="flex items-center space-x-2">
-                        <Checkbox 
-                          id="trainer" 
-                          checked={formData.needTrainer}
-                          onCheckedChange={(checked) => handleInputChange("needTrainer", checked as boolean)}
-                        />
-                        <Label htmlFor="trainer">Add Trainer (+₹7,500)</Label>
+                      <Label>Additional Services</Label>
+                      <div className="flex items-center space-x-4">
+                        <div className="flex items-center space-x-2">
+                          <Checkbox
+                            id="grooming"
+                            checked={formData.grooming}
+                            onCheckedChange={(checked) => handleInputChange("grooming", checked as boolean)}
+                          />
+                          <Label htmlFor="grooming">Dog Grooming (+₹1,000)</Label>
+                        </div>
                       </div>
                     </div>
                   )}
