@@ -61,7 +61,7 @@ const Index = () => {
     },
     {
       name: "Cute Look Competition",
-      standardFee: "₹3,000",
+      standardFee: "₹2,000",
       withTrainer: "₹5,000",
       description: "Beauty and grooming showcase",
     },

@@ -28,12 +28,18 @@ interface RegistrationFormProps {
 export const RegistrationForm = ({ isOpen, onClose, selectedPackage }: RegistrationFormProps) => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [ownerLocationManual, setOwnerLocationManual] = useState(false);
+  const [preferredLocationManual, setPreferredLocationManual] = useState(false);
+  const [ownerCityOtherMode, setOwnerCityOtherMode] = useState(false);
+  const [preferredCityOtherMode, setPreferredCityOtherMode] = useState(false);
   const [formData, setFormData] = useState({
     // Owner Details
     ownerName: "",
     email: "",
     phone: "",
     address: "",
+    country: "",
+    state: "",
     city: "",
     
     // Dog Details
@@ -48,6 +54,8 @@ export const RegistrationForm = ({ isOpen, onClose, selectedPackage }: Registrat
     packageType: "standard",
     grooming: false,
     preferredCity: "",
+    preferredState: "",
+    preferredCountry: "",
     
     // Additional
     medicalConditions: "",
@@ -55,7 +63,56 @@ export const RegistrationForm = ({ isOpen, onClose, selectedPackage }: Registrat
     termsAccepted: false,
   });
 
-  const cities = ["Gwalior", "Indore", "Delhi", "Bhopal", "Mumbai", "Chennai", "Ahmedabad", "Jaipur", "Kolkata", "Goa"];
+  const locationData: Record<string, Record<string, string[]>> = {
+    India: {
+      "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur"],
+      "Arunachal Pradesh": ["Itanagar", "Tawang"],
+      Assam: ["Guwahati", "Dibrugarh", "Silchar"],
+      Bihar: ["Patna", "Gaya", "Muzaffarpur"],
+      Chhattisgarh: ["Raipur", "Bilaspur", "Durg"],
+      Goa: ["Panaji", "Margao", "Mapusa"],
+      Gujarat: ["Ahmedabad", "Surat", "Vadodara"],
+      Haryana: ["Gurugram", "Faridabad", "Panipat"],
+      "Himachal Pradesh": ["Shimla", "Dharamshala", "Manali"],
+      Jharkhand: ["Ranchi", "Jamshedpur", "Dhanbad"],
+      Karnataka: ["Bengaluru", "Mysuru", "Mangaluru"],
+      Kerala: ["Kochi", "Thiruvananthapuram", "Kozhikode"],
+      "Madhya Pradesh": ["Indore", "Bhopal", "Gwalior"],
+      Maharashtra: ["Mumbai", "Pune", "Nagpur"],
+      Manipur: ["Imphal", "Thoubal"],
+      Meghalaya: ["Shillong", "Tura"],
+      Mizoram: ["Aizawl", "Lunglei"],
+      Nagaland: ["Kohima", "Dimapur"],
+      Odisha: ["Bhubaneswar", "Cuttack", "Rourkela"],
+      Punjab: ["Amritsar", "Ludhiana", "Jalandhar"],
+      Rajasthan: ["Jaipur", "Udaipur", "Jodhpur"],
+      Sikkim: ["Gangtok", "Namchi"],
+      "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai"],
+      Telangana: ["Hyderabad", "Warangal", "Nizamabad"],
+      Tripura: ["Agartala", "Udaipur"],
+      "Uttar Pradesh": ["Lucknow", "Noida", "Kanpur"],
+      Uttarakhand: ["Dehradun", "Haridwar", "Nainital"],
+      "West Bengal": ["Kolkata", "Siliguri", "Durgapur"],
+
+      // Union Territories
+      "Andaman and Nicobar Islands": ["Port Blair"],
+      Chandigarh: ["Chandigarh"],
+      "Dadra and Nagar Haveli and Daman and Diu": ["Daman", "Silvassa"],
+      Delhi: ["New Delhi", "Delhi"],
+      "Jammu and Kashmir": ["Srinagar", "Jammu"],
+      Ladakh: ["Leh", "Kargil"],
+      Lakshadweep: ["Kavaratti"],
+      Puducherry: ["Puducherry", "Karaikal"],
+    },
+  };
+
+  const countries = Object.keys(locationData);
+  const states = formData.country ? Object.keys(locationData[formData.country]) : [];
+  const ownerCities = formData.country && formData.state ? locationData[formData.country][formData.state] : [];
+  const preferredStates = formData.preferredCountry ? Object.keys(locationData[formData.preferredCountry]) : [];
+  const preferredCities = formData.preferredCountry && formData.preferredState
+    ? locationData[formData.preferredCountry][formData.preferredState]
+    : [];
   
   const dogBreeds = [
     "Golden Retriever", "Labrador", "German Shepherd", "Beagle", "Poodle", 
@@ -94,6 +151,8 @@ export const RegistrationForm = ({ isOpen, onClose, selectedPackage }: Registrat
       owner_phone: formData.phone,
       owner_address: formData.address,
       owner_city: formData.city,
+      owner_state: formData.state,
+      owner_country: formData.country,
       
       // Dog Information
       dog_name: formData.dogName,
@@ -110,6 +169,8 @@ export const RegistrationForm = ({ isOpen, onClose, selectedPackage }: Registrat
       package_type: formData.packageType === "standard" ? "Standard" : "With Trainer",
       grooming_service: formData.grooming ? "Yes (+₹1,000)" : "No",
       preferred_city: formData.preferredCity,
+      preferred_state: formData.preferredState || "",
+      preferred_country: formData.preferredCountry || "",
       total_amount: `₹${totalAmount.toLocaleString()}`,
       
       // Additional Information
@@ -215,6 +276,8 @@ Total Amount: ₹${totalAmount.toLocaleString()}
           email: "",
           phone: "",
           address: "",
+          country: "",
+          state: "",
           city: "",
           dogName: "",
           breed: "",
@@ -225,6 +288,8 @@ Total Amount: ₹${totalAmount.toLocaleString()}
           packageType: "standard",
           grooming: false,
           preferredCity: "",
+          preferredState: "",
+          preferredCountry: "",
           medicalConditions: "",
           specialRequests: "",
           termsAccepted: false,
@@ -244,6 +309,8 @@ Total Amount: ₹${totalAmount.toLocaleString()}
           email: "",
           phone: "",
           address: "",
+          country: "",
+          state: "",
           city: "",
           dogName: "",
           breed: "",
@@ -254,6 +321,8 @@ Total Amount: ₹${totalAmount.toLocaleString()}
           packageType: "standard",
           grooming: false,
           preferredCity: "",
+          preferredState: "",
+          preferredCountry: "",
           medicalConditions: "",
           specialRequests: "",
           termsAccepted: false,
@@ -381,17 +450,78 @@ Total Amount: ₹${totalAmount.toLocaleString()}
               </div>
               
               <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="country">Country *</Label>
+                  <Button type="button" variant="ghost" size="sm" onClick={() => setOwnerLocationManual(!ownerLocationManual)}>
+                    {ownerLocationManual ? "Use dropdowns" : "Type manually"}
+                  </Button>
+                </div>
+                {ownerLocationManual ? (
+                  <Input id="country" value={formData.country} onChange={(e) => handleInputChange("country", e.target.value)} placeholder="Enter your country" />
+                ) : (
+                  <Select value={formData.country} onValueChange={(value) => { handleInputChange("country", value); handleInputChange("state", ""); handleInputChange("city", ""); }}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select your country" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {countries.map((country) => (
+                        <SelectItem key={country} value={country}>{country}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="state">State *</Label>
+                {ownerLocationManual ? (
+                  <Input id="state" value={formData.state} onChange={(e) => handleInputChange("state", e.target.value)} placeholder="Enter your state" />
+                ) : (
+                  <Select value={formData.state} onValueChange={(value) => { handleInputChange("state", value); handleInputChange("city", ""); }} disabled={!formData.country}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select your state" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {states.map((st) => (
+                        <SelectItem key={st} value={st}>{st}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              </div>
+
+              <div className="space-y-2">
                 <Label htmlFor="city">City *</Label>
-                <Select value={formData.city} onValueChange={(value) => handleInputChange("city", value)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select your city" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {cities.map((city) => (
-                      <SelectItem key={city} value={city}>{city}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                {ownerLocationManual ? (
+                  <Input id="city" value={formData.city} onChange={(e) => handleInputChange("city", e.target.value)} placeholder="Enter your city" />
+                ) : (
+                  <>
+                  <Select value={ownerCityOtherMode ? "__OTHER__" : formData.city} onValueChange={(value) => {
+                    if (value === "__OTHER__") {
+                      setOwnerCityOtherMode(true);
+                      handleInputChange("city", "");
+                    } else {
+                      setOwnerCityOtherMode(false);
+                      handleInputChange("city", value);
+                    }
+                  }} disabled={!formData.state}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select your city" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {ownerCities.map((city) => (
+                        <SelectItem key={city} value={city}>{city}</SelectItem>
+                      ))}
+                      <SelectItem value="__OTHER__">Other (type manually)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {ownerCityOtherMode && (
+                    <div className="mt-2">
+                      <Input id="cityOther" value={formData.city} onChange={(e) => handleInputChange("city", e.target.value)} placeholder="Type your city" />
+                    </div>
+                  )}
+                  </>
+                )}
               </div>
               
               <div className="space-y-2 md:col-span-2">
@@ -508,17 +638,78 @@ Total Amount: ₹${totalAmount.toLocaleString()}
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="preferredCountry">Preferred Competition Country</Label>
+                  <Button type="button" variant="ghost" size="sm" onClick={() => setPreferredLocationManual(!preferredLocationManual)}>
+                    {preferredLocationManual ? "Use dropdowns" : "Type manually"}
+                  </Button>
+                </div>
+                {preferredLocationManual ? (
+                  <Input id="preferredCountry" value={formData.preferredCountry} onChange={(e) => handleInputChange("preferredCountry", e.target.value)} placeholder="Enter preferred country" />
+                ) : (
+                  <Select value={formData.preferredCountry} onValueChange={(value) => { handleInputChange("preferredCountry", value); handleInputChange("preferredState", ""); handleInputChange("preferredCity", ""); }}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select preferred country" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {countries.map((country) => (
+                        <SelectItem key={country} value={country}>{country}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="preferredState">Preferred Competition State</Label>
+                {preferredLocationManual ? (
+                  <Input id="preferredState" value={formData.preferredState} onChange={(e) => handleInputChange("preferredState", e.target.value)} placeholder="Enter preferred state" />
+                ) : (
+                  <Select value={formData.preferredState} onValueChange={(value) => { handleInputChange("preferredState", value); handleInputChange("preferredCity", ""); }} disabled={!formData.preferredCountry}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select preferred state" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {preferredStates.map((st) => (
+                        <SelectItem key={st} value={st}>{st}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              </div>
+
+              <div className="space-y-2">
                 <Label htmlFor="preferredCity">Preferred Competition City</Label>
-                <Select value={formData.preferredCity} onValueChange={(value) => handleInputChange("preferredCity", value)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select preferred city" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {cities.map((city) => (
-                      <SelectItem key={city} value={city}>{city}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                {preferredLocationManual ? (
+                  <Input id="preferredCity" value={formData.preferredCity} onChange={(e) => handleInputChange("preferredCity", e.target.value)} placeholder="Enter preferred city" />
+                ) : (
+                  <>
+                  <Select value={preferredCityOtherMode ? "__OTHER__" : formData.preferredCity} onValueChange={(value) => {
+                    if (value === "__OTHER__") {
+                      setPreferredCityOtherMode(true);
+                      handleInputChange("preferredCity", "");
+                    } else {
+                      setPreferredCityOtherMode(false);
+                      handleInputChange("preferredCity", value);
+                    }
+                  }} disabled={!formData.preferredState}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select preferred city" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {preferredCities.map((city) => (
+                        <SelectItem key={city} value={city}>{city}</SelectItem>
+                      ))}
+                      <SelectItem value="__OTHER__">Other (type manually)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {preferredCityOtherMode && (
+                    <div className="mt-2">
+                      <Input id="preferredCityOther" value={formData.preferredCity} onChange={(e) => handleInputChange("preferredCity", e.target.value)} placeholder="Type preferred city" />
+                    </div>
+                  )}
+                  </>
+                )}
               </div>
               
               <div className="space-y-2">
